@@ -12,9 +12,10 @@ module "external_secrets_irsa_role" {
     ex = {
       provider_arn = module.eks.oidc_provider_arn
       namespace_service_accounts = [
-        "secret-operator:${ var.project }-operator",
-        "${ var.project }-operator",
-        "default",
+        "default:external-secrets-cert-controller",
+        "default:external-secrets-webhook",
+        "default:sa-external-secrets-operator",
+        "default:redis"
       ]
     }
   }

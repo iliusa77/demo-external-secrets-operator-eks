@@ -57,3 +57,5 @@ useful references:
 - https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release
 - https://phoenixnap.com/kb/kubernetes-redis
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
+- https://shipit.dev/posts/setting-up-eks-with-irsa-using-terraform.html
+- https://aws.amazon.com/premiumsupport/knowledge-center/eks-troubleshoot-oidc-and-irsa/

@@ -24,3 +24,32 @@ HOW SOLVED:
 4. re-run "terraform apply -auto-approve"
 Maybe the problem was related with depends_on parameter in external_secret_redis.tf resources 
 or EKS cluster needs to be fully deployed before start kubectl_manifest resources creation
+
+16.03.2023
+
+kubectl get ClusterSecretStore demo-externalsecrets-secret-store
+NAME                                AGE   STATUS             READY
+demo-externalsecrets-secret-store   20m   ValidationFailed   False
+
+kubectl describe ClusterSecretStore demo-externalsecrets-secret-store
+ERROR:
+...
+  Warning  ValidationFailed  15m  cluster-secret-store  WebIdentityErr: failed to retrieve credentials
+caused by: AccessDenied: Not authorized to perform sts:AssumeRoleWithWebIdentity
+           status code: 403, request id: 3dcbd0ea-6d51-4874-b132-2923764dc3fd
+  Warning  ValidationFailed  4m33s (x9 over 15m)  cluster-secret-store  (combined from similar events): WebIdentityErr: failed to retrieve credentials
+caused by: AccessDenied: Not authorized to perform sts:AssumeRoleWithWebIdentity
+  status code: 403, request id: 7a79e936-69f1-48fc-a668-dc2d4ac5e09b
+
+kubectl get ExternalSecret redis-password
+NAME             STORE                               REFRESH INTERVAL   STATUS              READY
+redis-password   demo-externalsecrets-secret-store   1h                 SecretSyncedError   False
+
+kubectl describe ExternalSecret redis-password
+...
+Events:
+  Type     Reason            Age                 From              Message
+  ----     ------            ----                ----              -------
+  Warning  UnavailableStore  15m (x20 over 54m)  external-secrets  the desired SecretStore demo-externalsecrets-secret-store is not ready
+=========
+HOW TO SOLVE:
