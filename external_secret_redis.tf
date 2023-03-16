@@ -38,7 +38,7 @@ resource "kubectl_manifest" "external_secret" {
         name: redis-password
         creationPolicy: Owner
       data:
-      - secretKey: esoblog-test-password
+      - secretKey: redis-password
         remoteRef:
           key: "${ var.aws_secretsmanager_secret_name }"
           property: password

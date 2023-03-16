@@ -6,7 +6,7 @@ module "external_secrets_irsa_role" {
 
   role_name                             = "${ var.project }-external-secrets"
   attach_external_secrets_policy        = true
-  external_secrets_secrets_manager_arns = ["arn:aws:secretsmanager:*:${data.aws_caller_identity.current.account_id}:secret:${ var.project }-*"]
+  external_secrets_secrets_manager_arns = ["arn:aws:secretsmanager:*:${data.aws_caller_identity.current.account_id}:secret:${ var.aws_secretsmanager_secret_name }*"]
 
   oidc_providers = {
     ex = {

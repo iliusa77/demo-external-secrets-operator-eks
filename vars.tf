@@ -3,7 +3,7 @@ variable "project" {
 }
 
 variable "aws_secretsmanager_secret_name" {
-  default = "demo-externalsecrets-redis-password3"
+  default = "demo-externalsecrets-redis-password4"
 }
 
 variable "region" {
