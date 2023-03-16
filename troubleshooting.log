@@ -1,0 +1,26 @@
+16.03.2023
+ERROR:
+================================
+helm_release.external_secrets_operator: Creation complete after 2m55s [id=external-secrets-operator]
+╷
+│ Error: demo-externalsecrets-secret-store failed to run apply: error when creating "/tmp/357543489kubectl_manifest.yaml": Internal error occurred: failed calling webhook "validate.clustersecretstore.external-secrets.io": failed to call webhook: Post "https://external-secrets-operator-webhook.default.svc:443/validate-external-secrets-io-v1beta1-clustersecretstore?timeout=5s": no endpoints available for service "external-secrets-operator-webhook"
+│
+│   with kubectl_manifest.secret_store,
+│   on external_secret_redis.tf line 2, in resource "kubectl_manifest" "secret_store":
+│    2: resource "kubectl_manifest" "secret_store" {
+│
+╵
+╷
+│ Error: default/redis-password failed to run apply: error when creating "/tmp/637209578kubectl_manifest.yaml": Internal error occurred: failed calling webhook "validate.externalsecret.external-secrets.io": failed to call webhook: Post "https://external-secrets-operator-webhook.default.svc:443/validate-external-secrets-io-v1beta1-externalsecret?timeout=5s": no endpoints available for service "external-secrets-operator-webhook"
+│
+│   with kubectl_manifest.external_secret,
+│   on external_secret_redis.tf line 25, in resource "kubectl_manifest" "external_secret":
+│   25: resource "kubectl_manifest" "external_secret" {
+==============================
+HOW SOLVED: 
+1. commented all lines in external_secret_redis.tf
+2. re-run "terraform apply -auto-approve"
+3. uncomment all lines in external_secret_redis.tf
+4. re-run "terraform apply -auto-approve"
+Maybe the problem was related with depends_on parameter in external_secret_redis.tf resources 
+or EKS cluster needs to be fully deployed before start kubectl_manifest resources creation
