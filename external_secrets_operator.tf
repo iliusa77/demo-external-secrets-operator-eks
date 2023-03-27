@@ -50,5 +50,10 @@ resource "helm_release" "external_secrets_operator" {
     name  = "serviceAccount.create"
     value = true
   }
+
+  depends_on = [
+    module.eks,
+    module.external_secrets_irsa_role
+  ]
 }
 

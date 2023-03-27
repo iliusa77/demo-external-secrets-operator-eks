@@ -15,7 +15,8 @@ module "external_secrets_irsa_role" {
         "default:external-secrets-cert-controller",
         "default:external-secrets-webhook",
         "default:sa-external-secrets-operator",
-        "default:redis"
+        "default:redis",
+        "secret-operator:sa-external-secrets-operator"
       ]
     }
   }
