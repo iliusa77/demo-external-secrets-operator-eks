@@ -28,8 +28,10 @@ aws eks list-clusters
 aws eks update-kubeconfig --region eu-west-1 --name demo-externalsecrets-eks
 ```
 
-### Check ClusterSecretStore and ExternalSecret
+### Checking external-secrets-operator chart, ClusterSecretStore and ExternalSecret statuses
 ```
+helm ls | grep external-secrets-operator
+
 kubectl get ClusterSecretStore demo-externalsecrets-secret-store
 kubectl describe ClusterSecretStore demo-externalsecrets-secret-store
 
@@ -37,10 +39,26 @@ kubectl get ExternalSecret redis-password
 kubectl describe ExternalSecret redis-password
 ```
 
-### Check 'redis' chart status, version and pods status
+### Checking 'redis' pod, secret and retrieve secret from pod environment variable 
 ```
-helm ls | grep redis
-kubectl get po | grep redis
+kubectl get po,secret | grep redis
+kubectl exec -it redis -- bash -c "env | grep REDIS_PASSWORD"
+```
+
+Compare the REDIS_PASSWORD value with 'demo-externalsecrets-redis-password*' secret in AWS Secrets Manager
+
+### Checking Redis auth without/with REDIS_PASSWORD
+```
+kubectl exec -it redis -- redis-cli 
+
+127.0.0.1:6379> keys *
+(error) NOAUTH Authentication required
+
+127.0.0.1:6379> auth <REDIS_PASSWORD value>
+OK
+
+127.0.0.1:6379> keys *
+(empty list or set)
 ```
 
 ### Terraform cleanup
@@ -55,7 +73,6 @@ useful references:
 - https://medium.com/@danieljimgarcia/dont-use-the-terraform-kubernetes-manifest-resource-6c7ff4fe629a
 - https://stackoverflow.com/questions/67370473/failed-to-construct-rest-client
 - https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release
-- https://phoenixnap.com/kb/kubernetes-redis
-- https://github.com/bitnami/charts/tree/main/bitnami/redis
 - https://shipit.dev/posts/setting-up-eks-with-irsa-using-terraform.html
-- https://aws.amazon.com/premiumsupport/knowledge-center/eks-troubleshoot-oidc-and-irsa/
+- https://aws.amazon.com/premiumsupport/knowledge-center/eks-troubleshoot-oidc-and-irsa
+- https://phoenixnap.com/kb/kubernetes-redis
