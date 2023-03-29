@@ -1,54 +1,6 @@
-#SecretStore
-resource "kubectl_manifest" "secret_store" {
-  yaml_body  = <<-EOF
-    apiVersion: external-secrets.io/v1beta1
-    kind: ClusterSecretStore
-    metadata:
-      name: ${var.project}-secret-store
-    spec:
-      provider:
-        aws:
-          service: SecretsManager
-          region: ${var.region}
-          auth:
-            jwt:
-              serviceAccountRef:
-                name: sa-external-secrets-operator
-                namespace: default
-    EOF
-  depends_on = [
-    module.eks
-  ]
-}
+### Redis server is presented as an application which use the secret obtained from AWS Secrets Manager
 
-#ExternalSecret
-resource "kubectl_manifest" "external_secret" {
-  yaml_body  = <<-EOF
-    apiVersion: external-secrets.io/v1beta1
-    kind: ExternalSecret
-    metadata:
-      name: "redis-password"
-      namespace: default
-    spec:
-      refreshInterval: 1h
-      secretStoreRef:
-        name: ${var.project}-secret-store
-        kind: ClusterSecretStore
-      target:
-        name: redis-password
-        creationPolicy: Owner
-      data:
-      - secretKey: redis-password
-        remoteRef:
-          key: "${ var.aws_secretsmanager_secret_name }"
-          decodingStrategy: Auto
-    EOF
-  depends_on = [
-    module.eks,
-    kubectl_manifest.secret_store
-  ]
-}
-
+### Redis config
 resource "kubectl_manifest" "redis_cm" {
   yaml_body  = <<-EOF
     apiVersion: v1
@@ -66,6 +18,7 @@ resource "kubectl_manifest" "redis_cm" {
   ]
 }
 
+### Redis pod
 resource "kubectl_manifest" "redis_pod" {
   yaml_body  = <<-EOF
     apiVersion: v1

@@ -21,7 +21,7 @@ data "aws_secretsmanager_secret_version" "redis_password" {
   secret_id = aws_secretsmanager_secret.redis_password.id
 }
 
-# ###### External Secrets Operator 
+### External Secrets Operator 
 
 resource "helm_release" "external_secrets_operator" {
   name       = "external-secrets-operator"

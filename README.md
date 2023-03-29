@@ -1,4 +1,4 @@
-## AWS Infrastructure and Kubernetes entities deployment with Terraform
+## AWS Infrastructure and Kubernetes resources deployment with Terraform
 
 These TF templates are prepared for the `Manage secrets with AWS Secrets Manager and Kubernetes External Secrets Operator on EKS cluster` demo
 
