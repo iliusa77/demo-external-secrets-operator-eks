@@ -1,5 +1,6 @@
 ### SecretStore
 resource "kubectl_manifest" "secret_store" {
+  wait       = true
   yaml_body  = <<-EOF
     apiVersion: external-secrets.io/v1beta1
     kind: ClusterSecretStore
